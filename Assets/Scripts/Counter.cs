@@ -16,14 +16,14 @@ public class Counter : MonoBehaviour
     {
         _button.onClick.AddListener(OnButtonClick);       
     }
-    void Start()
+    private void Start()
     {
-        _counter.text = _currentValue.ToString("");
+        _counter.text = _currentValue.ToString();
     }
 
     private void OnDisable()
     {
-        _button.onClick.RemoveAllListeners();
+        _button.onClick.RemoveListener(OnButtonClick);
     }
 
     private void OnButtonClick()
@@ -33,16 +33,23 @@ public class Counter : MonoBehaviour
 
     private IEnumerator IncrementValueCoroutine()
     {
-        if (_isPlaying) _isPlaying = false;
-        else _isPlaying = true;
+        if (_isPlaying)
+        {
+            _isPlaying = false;
+        }
+        else
+        {
+            _isPlaying = true;
+        } 
             
+        WaitForSeconds waitForSeconds = new WaitForSeconds(_secondsToAdd);
+
         while (_isPlaying)
         {
             _currentValue++;
-
             _counter.text = _currentValue.ToString();
 
-            yield return new WaitForSeconds(_secondsToAdd);
+            yield return waitForSeconds;
         }      
     }
 }
